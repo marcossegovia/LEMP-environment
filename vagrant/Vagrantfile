@@ -1,0 +1,26 @@
+# Optimized for Vagrant 1.7 and above.
+Vagrant.require_version ">= 1.7.0"
+
+Vagrant.configure(2) do |config|
+
+  config.vm.box = "ubuntu/trusty64"
+  config.vm.synced_folder "../ansible", "/ansible"
+
+  # Disable the new default behavior introduced in Vagrant 1.7, to
+  # ensure that all Vagrant machines will use the same SSH key pair.
+  # See https://github.com/mitchellh/vagrant/issues/5005
+  config.ssh.insert_key = false
+
+  # Run Ansible from the Vagrant VM
+  config.vm.define "web", primary: true do |web|
+    web.vm.network "private_network", ip: "192.168.33.15"
+    web.vm.network "forwarded_port", guest: 80, host: 8080, auto_correct: true
+    web.vm.network "forwarded_port", guest: 443, host: 8081, auto_correct: true
+    web.vm.synced_folder "./shared/www", "/var/nfs", type: "nfs", create: true
+    web.nfs.map_uid = Process.uid
+    web.nfs.map_gid = Process.gid
+    web.bindfs.bind_folder "/var/nfs", "/var/www/html"
+
+    web.vm.provision "shell", path: "shell/provision.sh"
+  end
+end

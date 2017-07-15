@@ -1,0 +1,23 @@
+---
+- hosts: server
+  become: yes
+  gather_facts: yes
+  vars:
+    git_install_from_source: true
+    git_install_from_source_force_update: true
+    git_version: "2.9.4"
+    git_install_path: "/usr"
+    user: www-data
+    group: www-data
+  handlers:
+    - include: handlers/services.yml
+  roles:
+    - repositories
+    - { role: geerlingguy.git }
+    - common
+    - nginx
+    - mysql
+    - php
+    - { role: geerlingguy.composer }
+
+# usage: ansible-playbook -i inventories/hosts -u www-data provision.yml

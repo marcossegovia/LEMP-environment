@@ -1,0 +1,3 @@
+---
+connections: 1024 #Nginx Connection
+server_name: localhost #Nginx server_name, change it to your website e.g: rbgeek.com

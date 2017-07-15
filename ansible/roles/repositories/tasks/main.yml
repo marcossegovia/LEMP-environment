@@ -1,0 +1,51 @@
+---
+- name: Update APT package manager repositories cache
+  apt:
+    update_cache: yes
+
+- name: Upgrade installed packages
+  apt:
+    upgrade: safe
+
+- name: Install the Nginx Repository
+  apt_repository:
+    repo: 'ppa:nginx/stable'
+    state: present
+
+- name: Install the MySQL packages
+  apt:
+    name: "{{ item }}"
+    state: installed
+    update_cache: yes
+  with_items:
+    - mysql-server
+    - mysql-client
+    - python-mysqldb
+    - libmysqlclient-dev
+
+- name: Add PHP 7 PPA repository
+  apt_repository:
+    repo: 'ppa:ondrej/php'
+    state: present
+
+- name: Install PHP-FPM
+  apt:
+    name: "{{ item }}"
+    state: latest
+    update_cache: yes
+  with_items:
+    - php7.1-fpm
+    - php7.1-cgi
+    - php7.1-cli
+    - php7.1-curl
+    - php7.1-json
+    - php7.1-odbc
+    - php7.1-tidy
+    - php7.1-common
+    - php7.1-xmlrpc
+    - php7.1-gd
+    - php-pear
+    - php7.1-dev
+    - php7.1-imap
+    - php7.1-mcrypt
+    - php7.1-mysql
