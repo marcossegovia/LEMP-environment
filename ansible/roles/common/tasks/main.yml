@@ -1,3 +1,12 @@
 ---
 - name: Create directories based on current server role
   file: path=/var/www state=directory recurse=yes owner={{ user }} group={{ group }} mode='0755'
+
+- name: Install common packages
+  apt:
+    name: "{{ item }}"
+    state: latest
+    update_cache: yes
+  with_items:
+    - zip
+    - unzip

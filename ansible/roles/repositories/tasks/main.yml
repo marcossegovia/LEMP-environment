@@ -28,7 +28,7 @@
     repo: 'ppa:ondrej/php'
     state: present
 
-- name: Install PHP-FPM
+- name: Install php extensions
   apt:
     name: "{{ item }}"
     state: latest
@@ -49,3 +49,7 @@
     - php7.1-imap
     - php7.1-mcrypt
     - php7.1-mysql
+    - zip
+    - unzip
+    - php7.1-zip
+    - php7.1-mbstring
